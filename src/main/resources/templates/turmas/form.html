@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Turma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+<header class="bg-gray-900 text-white shadow">
+    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold">
+            CT <span class="text-red-500">JW</span>
+        </div>
+
+        <nav class="flex gap-6 text-sm font-medium">
+            <a href="/" class="hover:text-red-400">Início</a>
+            <a href="/alunos" class="hover:text-red-400">Alunos</a>
+            <a href="/turmas" class="bg-red-500 px-4 py-2 rounded">Turmas</a>
+            <a href="/professores" class="hover:text-red-400">Professores</a>
+        </nav>
+
+        <div class="text-sm text-gray-300">
+            Olá, Admin
+        </div>
+    </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-8 py-8">
+
+    <section class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">
+            Cadastro de Turma
+        </h1>
+        <p class="text-gray-500 mt-1">
+            Preencha os dados abaixo para cadastrar ou editar uma turma.
+        </p>
+    </section>
+
+    <section class="bg-white rounded shadow p-6">
+        <form th:action="@{/turmas/salvar}" th:object="${turma}" method="post"
+              class="space-y-5">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div>
+                <label class="block font-semibold mb-1">Nome da turma</label>
+                <input type="text"
+                       th:field="*{nome}"
+                       placeholder="Ex: Jiu-Jitsu Iniciante"
+                       class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                <p th:if="${#fields.hasErrors('nome')}"
+                   th:errors="*{nome}"
+                   class="text-red-600 text-sm mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Modalidade</label>
+                <input type="text"
+                       th:field="*{modalidade}"
+                       placeholder="Ex: Jiu-Jitsu, Muay Thai, Boxe"
+                       class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                <p th:if="${#fields.hasErrors('modalidade')}"
+                   th:errors="*{modalidade}"
+                   class="text-red-600 text-sm mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Dia da semana</label>
+                <select th:field="*{diaSemana}"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+                    <option value="">Selecione</option>
+                    <option value="Segunda-feira">Segunda-feira</option>
+                    <option value="Terça-feira">Terça-feira</option>
+                    <option value="Quarta-feira">Quarta-feira</option>
+                    <option value="Quinta-feira">Quinta-feira</option>
+                    <option value="Sexta-feira">Sexta-feira</option>
+                    <option value="Sábado">Sábado</option>
+                </select>
+
+                <p th:if="${#fields.hasErrors('diaSemana')}"
+                   th:errors="*{diaSemana}"
+                   class="text-red-600 text-sm mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Horário</label>
+                <input type="time"
+                       th:field="*{horario}"
+                       class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                <p th:if="${#fields.hasErrors('horario')}"
+                   th:errors="*{horario}"
+                   class="text-red-600 text-sm mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Professor responsável</label>
+
+                <select name="professorId"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                        required>
+                    <option value="">Selecione um professor</option>
+
+                    <option th:each="professor : ${professores}"
+                            th:value="${professor.id}"
+                            th:text="${professor.nome}"
+                            th:selected="${turma.professor != null and turma.professor.id == professor.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+                <button type="submit"
+                        class="bg-red-500 text-white px-6 py-3 rounded shadow hover:bg-red-600">
+                    Salvar
+                </button>
+
+                <a href="/turmas"
+                   class="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800">
+                    Cancelar
+                </a>
+            </div>
+
+        </form>
+    </section>
+
+</main>
+
+</body>
+</html>

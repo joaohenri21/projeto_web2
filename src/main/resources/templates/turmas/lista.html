@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Turmas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+<header class="bg-gray-900 text-white shadow">
+    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold">
+            CT <span class="text-red-500">JW</span>
+        </div>
+
+        <nav class="flex gap-6 text-sm font-medium">
+            <a href="/" class="hover:text-red-400">Início</a>
+            <a href="/alunos" class="hover:text-red-400">Alunos</a>
+            <a href="/turmas" class="bg-red-500 px-4 py-2 rounded">Turmas</a>
+            <a href="/professores" class="hover:text-red-400">Professores</a>
+        </nav>
+
+        <div class="text-sm text-gray-300">
+            Olá, Admin
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-8 py-8">
+
+    <section class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">
+                Turmas
+            </h1>
+            <p class="text-gray-500 mt-1">
+                Gerencie as turmas, horários, modalidades e professores responsáveis.
+            </p>
+        </div>
+
+        <a href="/turmas/novo"
+           class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
+            Nova Turma
+        </a>
+    </section>
+
+    <section class="bg-white rounded shadow overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-900 text-white">
+            <tr>
+                <th class="p-3 text-left">Nome</th>
+                <th class="p-3 text-left">Modalidade</th>
+                <th class="p-3 text-left">Dia</th>
+                <th class="p-3 text-left">Horário</th>
+                <th class="p-3 text-left">Professor</th>
+                <th class="p-3 text-center">Ações</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:if="${paginaTurmas.content.isEmpty()}">
+                <td colspan="7" class="p-4 text-center text-gray-500">
+                    Nenhuma turma cadastrada.
+                </td>
+            </tr>
+
+            <tr th:each="turma : ${paginaTurmas.content}" class="border-t hover:bg-gray-50">
+                <td class="p-3 font-semibold" th:text="${turma.nome}">Nome</td>
+                <td class="p-3" th:text="${turma.modalidade}">Modalidade</td>
+                <td class="p-3" th:text="${turma.diaSemana}">Dia</td>
+                <td class="p-3" th:text="${turma.horario}">Horário</td>
+                <td class="p-3"
+                    th:text="${turma.professor != null ? turma.professor.nome : 'Sem professor'}">
+                    Professor
+                </td>
+
+                <td class="p-3 text-center space-x-2">
+                    <a th:href="@{/turmas/detalhes/{id}(id=${turma.id})}"
+                       class="text-blue-600 hover:underline">
+                        Detalhes
+                    </a>
+
+                    <a th:href="@{/turmas/editar/{id}(id=${turma.id})}"
+                       class="text-yellow-600 hover:underline">
+                        Editar
+                    </a>
+
+                    <a th:href="@{/turmas/excluir/{id}(id=${turma.id})}"
+                       onclick="return confirm('Deseja realmente excluir esta turma?')"
+                       class="text-red-600 hover:underline">
+                        Excluir
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="flex justify-between items-center mt-6">
+        <a th:if="${paginaTurmas.hasPrevious()}"
+           th:href="@{/turmas(page=${paginaTurmas.number - 1})}"
+           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+            Anterior
+        </a>
+
+        <span class="text-gray-700">
+            Página
+            <span th:text="${paginaTurmas.number + 1}">1</span>
+            de
+            <span th:text="${paginaTurmas.totalPages}">1</span>
+        </span>
+
+        <a th:if="${paginaTurmas.hasNext()}"
+           th:href="@{/turmas(page=${paginaTurmas.number + 1})}"
+           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+            Próxima
+        </a>
+    </div>
+
+</main>
+
+</body>
+</html>

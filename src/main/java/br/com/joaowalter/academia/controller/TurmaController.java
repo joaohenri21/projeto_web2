@@ -42,15 +42,18 @@ public class TurmaController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Turma turma,
-                         BindingResult result,
-                         Model model) {
+            BindingResult result,
+            @RequestParam Long professorId,
+            Model model) {
 
         if (result.hasErrors()) {
             model.addAttribute("professores", professorService.listarTodos());
             return "turmas/form";
         }
 
+        turma.setProfessor(professorService.buscarPorId(professorId));
         turmaService.salvar(turma);
+
         return "redirect:/turmas";
     }
 
