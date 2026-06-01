@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Professores</title>
@@ -8,106 +9,120 @@
 
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
-<header class="bg-gray-900 text-white shadow">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold">
-            CT <span class="text-red-500">JW</span>
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" class="bg-red-500 px-4 py-2 rounded">Professores</a>
+            </nav>
+
+            <div class="text-sm text-gray-300">
+                Olá, Admin
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-8 py-8">
+
+        <section class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Professores
+                </h1>
+                <p class="text-gray-500 mt-1">
+                    Gerencie os professores cadastrados no centro de treinamento.
+                </p>
+            </div>
+
+            <a href="/professores/novo" class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
+                Novo Professor
+            </a>
+        </section>
+
+        <section class="bg-white rounded shadow p-4 mb-6">
+            <form th:action="@{/professores}" method="get" class="flex gap-3">
+                <input type="text" name="busca" th:value="${busca}" placeholder="Pesquisar professor pelo nome"
+                    class="flex-1 border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800">
+                    Pesquisar
+                </button>
+
+                <a href="/professores" class="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600">
+                    Limpar
+                </a>
+            </form>
+        </section>
+
+        <section class="bg-white rounded shadow overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-900 text-white">
+                    <tr>
+                        <th class="p-3 text-left">Nome</th>
+                        <th class="p-3 text-center">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:if="${paginaProfessores.content.isEmpty()}">
+                        <td colspan="4" class="p-4 text-center text-gray-500">
+                            Nenhum professor cadastrado.
+                        </td>
+                    </tr>
+
+                    <tr th:each="professor : ${paginaProfessores.content}" class="border-t hover:bg-gray-50">
+                        <td class="p-3 font-semibold" th:text="${professor.nome}">Nome</td>
+
+                        <td class="p-3 text-center space-x-2">
+                            <a th:href="@{/professores/detalhes/{id}(id=${professor.id})}"
+                                class="text-blue-600 hover:underline">
+                                Detalhes
+                            </a>
+
+                            <a th:href="@{/professores/editar/{id}(id=${professor.id})}"
+                                class="text-yellow-600 hover:underline">
+                                Editar
+                            </a>
+
+                            <a th:href="@{/professores/excluir/{id}(id=${professor.id})}"
+                                onclick="return confirm('Deseja realmente excluir este professor?')"
+                                class="text-red-600 hover:underline">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="flex justify-between items-center mt-6">
+            <a th:if="${paginaProfessores.hasPrevious()}"
+                th:href="@{/professores(page=${paginaProfessores.number - 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Anterior
+            </a>
+
+            <span class="text-gray-700">
+                Página
+                <span th:text="${paginaProfessores.number + 1}">1</span>
+                de
+                <span th:text="${paginaProfessores.totalPages}">1</span>
+            </span>
+
+            <a th:if="${paginaProfessores.hasNext()}" th:href="@{/professores(page=${paginaProfessores.number + 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Próxima
+            </a>
         </div>
 
-        <nav class="flex gap-6 text-sm font-medium">
-            <a href="/" class="hover:text-red-400">Início</a>
-            <a href="/alunos" class="hover:text-red-400">Alunos</a>
-            <a href="/turmas" class="hover:text-red-400">Turmas</a>
-            <a href="/professores" class="bg-red-500 px-4 py-2 rounded">Professores</a>
-        </nav>
-
-        <div class="text-sm text-gray-300">
-            Olá, Admin
-        </div>
-    </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-8 py-8">
-
-    <section class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                Professores
-            </h1>
-            <p class="text-gray-500 mt-1">
-                Gerencie os professores cadastrados no centro de treinamento.
-            </p>
-        </div>
-
-        <a href="/professores/novo"
-           class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
-            Novo Professor
-        </a>
-    </section>
-
-    <section class="bg-white rounded shadow overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-900 text-white">
-            <tr>
-                <th class="p-3 text-left">Nome</th>
-                <th class="p-3 text-center">Ações</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:if="${paginaProfessores.content.isEmpty()}">
-                <td colspan="4" class="p-4 text-center text-gray-500">
-                    Nenhum professor cadastrado.
-                </td>
-            </tr>
-
-            <tr th:each="professor : ${paginaProfessores.content}" class="border-t hover:bg-gray-50">
-                <td class="p-3 font-semibold" th:text="${professor.nome}">Nome</td>
-
-                <td class="p-3 text-center space-x-2">
-                    <a th:href="@{/professores/detalhes/{id}(id=${professor.id})}"
-                       class="text-blue-600 hover:underline">
-                        Detalhes
-                    </a>
-
-                    <a th:href="@{/professores/editar/{id}(id=${professor.id})}"
-                       class="text-yellow-600 hover:underline">
-                        Editar
-                    </a>
-
-                    <a th:href="@{/professores/excluir/{id}(id=${professor.id})}"
-                       onclick="return confirm('Deseja realmente excluir este professor?')"
-                       class="text-red-600 hover:underline">
-                        Excluir
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <div class="flex justify-between items-center mt-6">
-        <a th:if="${paginaProfessores.hasPrevious()}"
-           th:href="@{/professores(page=${paginaProfessores.number - 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Anterior
-        </a>
-
-        <span class="text-gray-700">
-            Página
-            <span th:text="${paginaProfessores.number + 1}">1</span>
-            de
-            <span th:text="${paginaProfessores.totalPages}">1</span>
-        </span>
-
-        <a th:if="${paginaProfessores.hasNext()}"
-           th:href="@{/professores(page=${paginaProfessores.number + 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Próxima
-        </a>
-    </div>
-
-</main>
+    </main>
 
 </body>
+
 </html>

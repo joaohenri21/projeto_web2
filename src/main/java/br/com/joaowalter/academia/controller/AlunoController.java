@@ -23,10 +23,18 @@ public class AlunoController {
 
     @GetMapping
     public String listar(
+            @RequestParam(required = false) String busca,
             @PageableDefault(size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
-        model.addAttribute("paginaAlunos", alunoService.listar(pageable));
+        if (busca != null && !busca.isBlank()) {
+            model.addAttribute("paginaAlunos", alunoService.pesquisarPorNome(busca, pageable));
+        } else {
+            model.addAttribute("paginaAlunos", alunoService.listar(pageable));
+        }
+
+        model.addAttribute("busca", busca);
+
         return "alunos/lista";
     }
 

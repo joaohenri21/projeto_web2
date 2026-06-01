@@ -19,6 +19,10 @@ public class AlunoService {
         return alunoRepository.findAll(pageable);
     }
 
+    public Page<Aluno> pesquisarPorNome(String nome, Pageable pageable) {
+        return alunoRepository.findByNomeContainingIgnoreCase(nome, pageable);
+    }
+
     public Aluno buscarPorId(Long id) {
         return alunoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));

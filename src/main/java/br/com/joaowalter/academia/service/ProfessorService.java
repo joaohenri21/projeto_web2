@@ -1,6 +1,5 @@
 package br.com.joaowalter.academia.service;
 
-
 import br.com.joaowalter.academia.model.Professor;
 import br.com.joaowalter.academia.repository.ProfessorRepository;
 import org.springframework.data.domain.Page;
@@ -27,6 +26,10 @@ public class ProfessorService {
     public Professor buscarPorId(Long id) {
         return professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+    }
+
+    public Page<Professor> pesquisarPorNome(String nome, Pageable pageable) {
+        return professorRepository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
     public Professor salvar(Professor professor) {

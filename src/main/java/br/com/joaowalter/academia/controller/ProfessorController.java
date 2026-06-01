@@ -23,10 +23,18 @@ public class ProfessorController {
 
     @GetMapping
     public String listar(
+            @RequestParam(required = false) String busca,
             @PageableDefault(size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
-        model.addAttribute("paginaProfessores", professorService.listar(pageable));
+        if (busca != null && !busca.isBlank()) {
+            model.addAttribute("paginaProfessores", professorService.pesquisarPorNome(busca, pageable));
+        } else {
+            model.addAttribute("paginaProfessores", professorService.listar(pageable));
+        }
+
+        model.addAttribute("busca", busca);
+
         return "professores/lista";
     }
 
@@ -38,7 +46,7 @@ public class ProfessorController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Professor professor,
-                         BindingResult result) {
+            BindingResult result) {
 
         if (result.hasErrors()) {
             return "professores/form";

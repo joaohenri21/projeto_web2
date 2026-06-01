@@ -26,10 +26,18 @@ public class TurmaController {
 
     @GetMapping
     public String listar(
+            @RequestParam(required = false) String busca,
             @PageableDefault(size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
-        model.addAttribute("paginaTurmas", turmaService.listar(pageable));
+        if (busca != null && !busca.isBlank()) {
+            model.addAttribute("paginaTurmas", turmaService.pesquisarPorNome(busca, pageable));
+        } else {
+            model.addAttribute("paginaTurmas", turmaService.listar(pageable));
+        }
+
+        model.addAttribute("busca", busca);
+
         return "turmas/lista";
     }
 

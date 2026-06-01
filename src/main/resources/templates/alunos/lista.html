@@ -45,6 +45,21 @@
         </a>
     </section>
 
+    <section class="bg-white rounded shadow p-4 mb-6">
+        <form th:action="@{/alunos}" method="get" class="flex gap-3">
+            <input type="text" name="busca" th:value="${busca}" placeholder="Pesquisar aluno pelo nome"
+                   class="flex-1 border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+            <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800">
+                Pesquisar
+            </button>
+
+            <a href="/alunos" class="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600">
+                Limpar
+            </a>
+        </form>
+    </section>
+
     <section class="bg-white rounded shadow overflow-hidden">
         <table class="w-full">
             <thead class="bg-gray-900 text-white">

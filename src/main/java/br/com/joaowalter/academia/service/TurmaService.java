@@ -19,6 +19,10 @@ public class TurmaService {
         return turmaRepository.findAll(pageable);
     }
 
+    public Page<Turma> pesquisarPorNome(String nome, Pageable pageable) {
+        return turmaRepository.findByNomeContainingIgnoreCase(nome, pageable);
+    }
+
     public Turma buscarPorId(Long id) {
         return turmaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
