@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/turmas/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/matriculas/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/presencas/**").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/relatorios/**").hasAnyRole("ADMIN", "PROFESSOR")
 
                         .anyRequest().authenticated()
                 )
