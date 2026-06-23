@@ -20,6 +20,8 @@
                 <a href="/alunos" class="hover:text-red-400">Alunos</a>
                 <a href="/turmas" class="hover:text-red-400">Turmas</a>
                 <a href="/professores" class="bg-red-500 px-4 py-2 rounded">Professores</a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
             </nav>
 
             <div class="text-sm text-gray-300">
@@ -115,7 +117,8 @@
                 <span th:text="${paginaProfessores.totalPages}">1</span>
             </span>
 
-            <a th:if="${paginaProfessores.hasNext()}" th:href="@{/professores(page=${paginaProfessores.number + 1}, busca=${busca})}"
+            <a th:if="${paginaProfessores.hasNext()}"
+                th:href="@{/professores(page=${paginaProfessores.number + 1}, busca=${busca})}"
                 class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
                 Próxima
             </a>

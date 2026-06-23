@@ -9,139 +9,133 @@
 
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
-<header class="bg-gray-900 text-white shadow">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold">
-            CT <span class="text-red-500">JW</span>
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="bg-red-500 px-4 py-2 rounded">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
+            </nav>
+
+            <div class="text-sm text-gray-300">
+                Olá, Admin
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-8 py-8">
+
+        <section class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Matrículas
+                </h1>
+                <p class="text-gray-500 mt-1">
+                    Gerencie os alunos matriculados nas turmas do centro de treinamento.
+                </p>
+            </div>
+
+            <a href="/matriculas/nova" class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
+                Nova Matrícula
+            </a>
+        </section>
+
+        <section class="bg-white rounded shadow overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-900 text-white">
+                    <tr>
+                        <th class="p-3 text-left">Aluno</th>
+                        <th class="p-3 text-left">Turma</th>
+                        <th class="p-3 text-left">Data da Matrícula</th>
+                        <th class="p-3 text-left">Status</th>
+                        <th class="p-3 text-center">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:if="${paginaMatriculas.content.isEmpty()}">
+                        <td colspan="5" class="p-4 text-center text-gray-500">
+                            Nenhuma matrícula cadastrada.
+                        </td>
+                    </tr>
+
+                    <tr th:each="matricula : ${paginaMatriculas.content}" class="border-t hover:bg-gray-50">
+
+                        <td class="p-3 font-semibold"
+                            th:text="${matricula.aluno != null ? matricula.aluno.nome : 'Sem aluno'}">
+                            Nome do aluno
+                        </td>
+
+                        <td class="p-3" th:text="${matricula.turma != null ? matricula.turma.nome : 'Sem turma'}">
+                            Nome da turma
+                        </td>
+
+                        <td class="p-3" th:text="${matricula.dataMatricula}">
+                            Data
+                        </td>
+
+                        <td class="p-3">
+                            <span th:if="${matricula.status == 'ATIVA'}"
+                                class="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-semibold">
+                                ATIVA
+                            </span>
+
+                            <span th:if="${matricula.status == 'CANCELADA'}"
+                                class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-semibold">
+                                CANCELADA
+                            </span>
+
+                            <span th:if="${matricula.status != 'ATIVA' and matricula.status != 'CANCELADA'}"
+                                class="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm font-semibold"
+                                th:text="${matricula.status}">
+                                Status
+                            </span>
+                        </td>
+
+                        <td class="p-3 text-center">
+                            <a th:if="${matricula.status == 'ATIVA'}"
+                                th:href="@{/matriculas/cancelar/{id}(id=${matricula.id})}"
+                                onclick="return confirm('Deseja realmente cancelar esta matrícula?')"
+                                class="text-red-600 hover:underline">
+                                Cancelar
+                            </a>
+
+                            <span th:if="${matricula.status == 'CANCELADA'}" class="text-gray-400">
+                                Sem ações
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="flex justify-between items-center mt-6">
+            <a th:if="${paginaMatriculas.hasPrevious()}" th:href="@{/matriculas(page=${paginaMatriculas.number - 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Anterior
+            </a>
+
+            <span class="text-gray-700">
+                Página
+                <span th:text="${paginaMatriculas.number + 1}">1</span>
+                de
+                <span th:text="${paginaMatriculas.totalPages}">1</span>
+            </span>
+
+            <a th:if="${paginaMatriculas.hasNext()}" th:href="@{/matriculas(page=${paginaMatriculas.number + 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Próxima
+            </a>
         </div>
 
-        <nav class="flex gap-6 text-sm font-medium">
-            <a href="/" class="hover:text-red-400">Início</a>
-            <a href="/alunos" class="hover:text-red-400">Alunos</a>
-            <a href="/turmas" class="hover:text-red-400">Turmas</a>
-            <a href="/professores" class="hover:text-red-400">Professores</a>
-            <a href="/matriculas" class="bg-red-500 px-4 py-2 rounded">Matrículas</a>
-        </nav>
-
-        <div class="text-sm text-gray-300">
-            Olá, Admin
-        </div>
-    </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-8 py-8">
-
-    <section class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                Matrículas
-            </h1>
-            <p class="text-gray-500 mt-1">
-                Gerencie os alunos matriculados nas turmas do centro de treinamento.
-            </p>
-        </div>
-
-        <a href="/matriculas/nova"
-           class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
-            Nova Matrícula
-        </a>
-    </section>
-
-    <section class="bg-white rounded shadow overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-900 text-white">
-            <tr>
-                <th class="p-3 text-left">Aluno</th>
-                <th class="p-3 text-left">Turma</th>
-                <th class="p-3 text-left">Data da Matrícula</th>
-                <th class="p-3 text-left">Status</th>
-                <th class="p-3 text-center">Ações</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:if="${paginaMatriculas.content.isEmpty()}">
-                <td colspan="5" class="p-4 text-center text-gray-500">
-                    Nenhuma matrícula cadastrada.
-                </td>
-            </tr>
-
-            <tr th:each="matricula : ${paginaMatriculas.content}"
-                class="border-t hover:bg-gray-50">
-
-                <td class="p-3 font-semibold"
-                    th:text="${matricula.aluno != null ? matricula.aluno.nome : 'Sem aluno'}">
-                    Nome do aluno
-                </td>
-
-                <td class="p-3"
-                    th:text="${matricula.turma != null ? matricula.turma.nome : 'Sem turma'}">
-                    Nome da turma
-                </td>
-
-                <td class="p-3"
-                    th:text="${matricula.dataMatricula}">
-                    Data
-                </td>
-
-                <td class="p-3">
-                    <span th:if="${matricula.status == 'ATIVA'}"
-                          class="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-semibold">
-                        ATIVA
-                    </span>
-
-                    <span th:if="${matricula.status == 'CANCELADA'}"
-                          class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-semibold">
-                        CANCELADA
-                    </span>
-
-                    <span th:if="${matricula.status != 'ATIVA' and matricula.status != 'CANCELADA'}"
-                          class="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm font-semibold"
-                          th:text="${matricula.status}">
-                        Status
-                    </span>
-                </td>
-
-                <td class="p-3 text-center">
-                    <a th:if="${matricula.status == 'ATIVA'}"
-                       th:href="@{/matriculas/cancelar/{id}(id=${matricula.id})}"
-                       onclick="return confirm('Deseja realmente cancelar esta matrícula?')"
-                       class="text-red-600 hover:underline">
-                        Cancelar
-                    </a>
-
-                    <span th:if="${matricula.status == 'CANCELADA'}"
-                          class="text-gray-400">
-                        Sem ações
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <div class="flex justify-between items-center mt-6">
-        <a th:if="${paginaMatriculas.hasPrevious()}"
-           th:href="@{/matriculas(page=${paginaMatriculas.number - 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Anterior
-        </a>
-
-        <span class="text-gray-700">
-            Página
-            <span th:text="${paginaMatriculas.number + 1}">1</span>
-            de
-            <span th:text="${paginaMatriculas.totalPages}">1</span>
-        </span>
-
-        <a th:if="${paginaMatriculas.hasNext()}"
-           th:href="@{/matriculas(page=${paginaMatriculas.number + 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Próxima
-        </a>
-    </div>
-
-</main>
+    </main>
 
 </body>
 

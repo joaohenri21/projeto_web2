@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Detalhes da Turma</title>
@@ -8,99 +9,101 @@
 
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
-<header class="bg-gray-900 text-white shadow">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold">
-            CT <span class="text-red-500">JW</span>
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="bg-red-500 px-4 py-2 rounded">Turmas</a>
+                <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
+            </nav>
+
+            <div class="text-sm text-gray-300">
+                Olá, Admin
+            </div>
         </div>
+    </header>
 
-        <nav class="flex gap-6 text-sm font-medium">
-            <a href="/" class="hover:text-red-400">Início</a>
-            <a href="/alunos" class="hover:text-red-400">Alunos</a>
-            <a href="/turmas" class="bg-red-500 px-4 py-2 rounded">Turmas</a>
-            <a href="/professores" class="hover:text-red-400">Professores</a>
-        </nav>
+    <main class="max-w-4xl mx-auto px-8 py-8">
 
-        <div class="text-sm text-gray-300">
-            Olá, Admin
-        </div>
-    </div>
-</header>
-
-<main class="max-w-4xl mx-auto px-8 py-8">
-
-    <section class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">
-            Detalhes da Turma
-        </h1>
-        <p class="text-gray-500 mt-1">
-            Informações completas da turma cadastrada.
-        </p>
-    </section>
-
-    <section class="bg-white rounded shadow overflow-hidden">
-        <div class="bg-gray-900 text-white px-6 py-4">
-            <h2 class="text-xl font-bold" th:text="${turma.nome}">
-                Nome da Turma
-            </h2>
-            <p class="text-gray-300 text-sm">
-                Turma cadastrada no centro de treinamento
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Detalhes da Turma
+            </h1>
+            <p class="text-gray-500 mt-1">
+                Informações completas da turma cadastrada.
             </p>
-        </div>
+        </section>
 
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                <div class="border rounded p-4">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">ID</p>
-                    <p class="text-lg font-bold" th:text="${turma.id}">1</p>
-                </div>
-
-                <div class="border rounded p-4">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">Nome</p>
-                    <p class="text-lg font-bold" th:text="${turma.nome}">Nome</p>
-                </div>
-
-                <div class="border rounded p-4">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">Modalidade</p>
-                    <p class="text-lg font-bold" th:text="${turma.modalidade}">Modalidade</p>
-                </div>
-
-                <div class="border rounded p-4">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">Dia da semana</p>
-                    <p class="text-lg font-bold" th:text="${turma.diaSemana}">Dia</p>
-                </div>
-
-                <div class="border rounded p-4">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">Horário</p>
-                    <p class="text-lg font-bold" th:text="${turma.horario}">19:00</p>
-                </div>
-
-                <div class="border rounded p-4 md:col-span-2">
-                    <p class="text-sm text-gray-500 font-semibold uppercase">Professor responsável</p>
-                    <p class="text-lg font-bold"
-                       th:text="${turma.professor != null ? turma.professor.nome : 'Sem professor'}">
-                        Professor
-                    </p>
-                </div>
-
+        <section class="bg-white rounded shadow overflow-hidden">
+            <div class="bg-gray-900 text-white px-6 py-4">
+                <h2 class="text-xl font-bold" th:text="${turma.nome}">
+                    Nome da Turma
+                </h2>
+                <p class="text-gray-300 text-sm">
+                    Turma cadastrada no centro de treinamento
+                </p>
             </div>
 
-            <div class="flex gap-3 pt-4">
-                <a th:href="@{/turmas/editar/{id}(id=${turma.id})}"
-                   class="bg-red-500 text-white px-6 py-3 rounded shadow hover:bg-red-600">
-                    Editar
-                </a>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                <a href="/turmas"
-                   class="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800">
-                    Voltar
-                </a>
+                    <div class="border rounded p-4">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">ID</p>
+                        <p class="text-lg font-bold" th:text="${turma.id}">1</p>
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">Nome</p>
+                        <p class="text-lg font-bold" th:text="${turma.nome}">Nome</p>
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">Modalidade</p>
+                        <p class="text-lg font-bold" th:text="${turma.modalidade}">Modalidade</p>
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">Dia da semana</p>
+                        <p class="text-lg font-bold" th:text="${turma.diaSemana}">Dia</p>
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">Horário</p>
+                        <p class="text-lg font-bold" th:text="${turma.horario}">19:00</p>
+                    </div>
+
+                    <div class="border rounded p-4 md:col-span-2">
+                        <p class="text-sm text-gray-500 font-semibold uppercase">Professor responsável</p>
+                        <p class="text-lg font-bold"
+                            th:text="${turma.professor != null ? turma.professor.nome : 'Sem professor'}">
+                            Professor
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <a th:href="@{/turmas/editar/{id}(id=${turma.id})}"
+                        class="bg-red-500 text-white px-6 py-3 rounded shadow hover:bg-red-600">
+                        Editar
+                    </a>
+
+                    <a href="/turmas" class="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800">
+                        Voltar
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-</main>
+    </main>
 
 </body>
+
 </html>

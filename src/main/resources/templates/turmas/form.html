@@ -21,6 +21,8 @@
                 <a href="/alunos" class="hover:text-red-400">Alunos</a>
                 <a href="/turmas" class="bg-red-500 px-4 py-2 rounded">Turmas</a>
                 <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
             </nav>
 
             <div class="text-sm text-gray-300">
@@ -129,13 +131,13 @@
     </main>
 
     <script>
-    function selecionarProfessor(id, nome) {
-        document.getElementById("professorId").value = id;
-        document.getElementById("professorBusca").value = nome;
-        document.getElementById("resultadoProfessores").innerHTML = "";
-        document.getElementById("professorSelecionado").innerText = "Professor selecionado: " + nome;
-    }
-</script>
+        function selecionarProfessor(id, nome) {
+            document.getElementById("professorId").value = id;
+            document.getElementById("professorBusca").value = nome;
+            document.getElementById("resultadoProfessores").innerHTML = "";
+            document.getElementById("professorSelecionado").innerText = "Professor selecionado: " + nome;
+        }
+    </script>
 
 </body>
 

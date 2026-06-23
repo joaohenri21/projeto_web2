@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class MatriculaService {
@@ -32,6 +33,10 @@ public class MatriculaService {
     public Matricula buscarPorId(Long id) {
         return matriculaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Matrícula não encontrada"));
+    }
+
+    public List<Matricula> listarAtivasPorTurma(Long turmaId) {
+        return matriculaRepository.findByTurmaIdAndStatusOrderByAlunoNomeAsc(turmaId, "ATIVA");
     }
 
     public Matricula matricular(Long alunoId, Long turmaId) {
