@@ -51,11 +51,15 @@ public class TurmaController {
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Turma turma,
             BindingResult result,
-            @RequestParam Long professorId,
+            @RequestParam(required = false) Long professorId,
             Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("professores", professorService.listarTodos());
+            return "turmas/form";
+        }
+
+        if (professorId == null) {
+            model.addAttribute("erroProfessor", "Selecione um professor.");
             return "turmas/form";
         }
 
@@ -63,6 +67,14 @@ public class TurmaController {
         turmaService.salvar(turma);
 
         return "redirect:/turmas";
+    }
+
+    @GetMapping("/pesquisar-professores")
+    public String pesquisarProfessores(@RequestParam("professorBusca") String professorBusca,
+            Model model) {
+
+        model.addAttribute("professoresEncontrados", professorService.pesquisarPorNome(professorBusca));
+        return "turmas/professores-busca :: lista";
     }
 
     @GetMapping("/editar/{id}")

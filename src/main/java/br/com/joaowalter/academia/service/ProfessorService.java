@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfessorService {
 
@@ -19,6 +21,22 @@ public class ProfessorService {
         return professorRepository.findAll(pageable);
     }
 
+    public Page<Professor> pesquisarPorNome(String nome, Pageable pageable) {
+        if (nome == null || nome.isBlank()) {
+            return professorRepository.findAll(pageable);
+        }
+
+        return professorRepository.findByNomeContainingIgnoreCase(nome, pageable);
+    }
+
+    public List<Professor> pesquisarPorNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            return List.of();
+        }
+
+        return professorRepository.findTop10ByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+    }
+
     public Iterable<Professor> listarTodos() {
         return professorRepository.findAll();
     }
@@ -26,10 +44,6 @@ public class ProfessorService {
     public Professor buscarPorId(Long id) {
         return professorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
-    }
-
-    public Page<Professor> pesquisarPorNome(String nome, Pageable pageable) {
-        return professorRepository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
     public Professor salvar(Professor professor) {

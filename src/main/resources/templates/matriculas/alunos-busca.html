@@ -1,0 +1,17 @@
+<th:block th:fragment="lista" xmlns:th="http://www.thymeleaf.org">
+
+    <li th:if="${#lists.isEmpty(alunosEncontrados)}"
+        class="p-3 text-gray-500 italic cursor-default">
+        Nenhum aluno encontrado.
+    </li>
+
+    <li th:each="aluno : ${alunosEncontrados}"
+        class="p-3 hover:bg-gray-100 cursor-pointer border-b"
+        th:data-id="${aluno.id}"
+        th:data-nome="${aluno.nome}"
+        onclick="selecionarAluno(this.dataset.id, this.dataset.nome)"
+        th:text="${aluno.nome}">
+        Nome do aluno
+    </li>
+
+</th:block>

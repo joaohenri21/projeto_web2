@@ -1,0 +1,17 @@
+<th:block th:fragment="lista" xmlns:th="http://www.thymeleaf.org">
+
+    <li th:if="${#lists.isEmpty(professoresEncontrados)}"
+        class="p-3 text-gray-500 italic cursor-default">
+        Nenhum professor encontrado.
+    </li>
+
+    <li th:each="professor : ${professoresEncontrados}"
+        class="p-3 hover:bg-gray-100 cursor-pointer border-b"
+        th:data-id="${professor.id}"
+        th:data-nome="${professor.nome}"
+        onclick="selecionarProfessor(this.dataset.id, this.dataset.nome)"
+        th:text="${professor.nome}">
+        Nome do professor
+    </li>
+
+</th:block>

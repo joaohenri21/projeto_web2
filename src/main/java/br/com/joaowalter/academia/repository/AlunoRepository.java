@@ -13,4 +13,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     Page<Aluno> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
+    List<Aluno> findTop10ByNomeContainingIgnoreCaseOrderByNomeAsc(String nome);
+
 }

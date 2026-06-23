@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Matrícula</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="bg-red-500 px-4 py-2 rounded">Matrículas</a>
+            </nav>
+
+            <div class="text-sm text-gray-300">
+                Olá, Admin
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-8 py-8">
+
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Nova Matrícula
+            </h1>
+
+            <p class="text-gray-500 mt-1">
+                Selecione um aluno e uma turma para realizar a matrícula.
+            </p>
+        </section>
+
+        <section class="bg-white rounded shadow p-8">
+
+            <div th:if="${erro != null}" class="bg-red-100 text-red-700 p-4 rounded mb-6 font-semibold"
+                th:text="${erro}">
+                Mensagem de erro
+            </div>
+
+            <form th:action="@{/matriculas/salvar}" method="post" class="space-y-6">
+
+                <div>
+                    <label for="alunoBusca" class="block font-semibold mb-1">
+                        Aluno
+                    </label>
+
+                    <input type="hidden" id="alunoId" name="alunoId">
+
+                    <input type="text" id="alunoBusca" name="alunoBusca" placeholder="Digite o nome do aluno"
+                        autocomplete="off" hx-get="/matriculas/pesquisar-alunos" hx-trigger="keyup changed delay:300ms"
+                        hx-target="#resultadoAlunos" hx-include="#alunoBusca"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                    <ul id="resultadoAlunos" class="bg-white border border-gray-300 rounded mt-2 shadow">
+                    </ul>
+
+                    <p id="alunoSelecionado" class="text-sm text-gray-500 mt-2">
+                        Nenhum aluno selecionado.
+                    </p>
+                </div>
+
+                <div>
+                    <label for="turmaId" class="block font-semibold mb-1">
+                        Turma
+                    </label>
+
+                    <select id="turmaId" name="turmaId"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                        <option value="">
+                            Selecione uma turma
+                        </option>
+
+                        <option th:each="turma : ${turmas}" th:value="${turma.id}"
+                            th:text="${turma.nome + ' - ' + turma.modalidade}">
+                            Nome da turma
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <a href="/matriculas" class="bg-gray-500 text-white px-5 py-3 rounded hover:bg-gray-600">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="bg-red-500 text-white px-5 py-3 rounded hover:bg-red-600">
+                        Salvar Matrícula
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+
+    <script>
+        function selecionarAluno(id, nome) {
+            document.getElementById("alunoId").value = id;
+            document.getElementById("alunoBusca").value = nome;
+            document.getElementById("resultadoAlunos").innerHTML = "";
+            document.getElementById("alunoSelecionado").innerText = "Aluno selecionado: " + nome;
+        }
+    </script>
+
+</body>
+
+</html>

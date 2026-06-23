@@ -103,7 +103,7 @@
 
         <div class="flex justify-between items-center mt-6">
             <a th:if="${paginaProfessores.hasPrevious()}"
-                th:href="@{/professores(page=${paginaProfessores.number - 1})}"
+                th:href="@{/professores(page=${paginaProfessores.number - 1}, busca=${busca})}"
                 class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
                 Anterior
             </a>
@@ -115,7 +115,7 @@
                 <span th:text="${paginaProfessores.totalPages}">1</span>
             </span>
 
-            <a th:if="${paginaProfessores.hasNext()}" th:href="@{/professores(page=${paginaProfessores.number + 1})}"
+            <a th:if="${paginaProfessores.hasNext()}" th:href="@{/professores(page=${paginaProfessores.number + 1}, busca=${busca})}"
                 class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
                 Próxima
             </a>

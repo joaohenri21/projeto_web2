@@ -28,6 +28,10 @@ public class TurmaService {
                 .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
     }
 
+    public Iterable<Turma> listarTodos() {
+        return turmaRepository.findAll();
+    }
+
     public Turma salvar(Turma turma) {
         return turmaRepository.save(turma);
     }
