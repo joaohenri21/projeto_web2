@@ -51,6 +51,8 @@
 
             <form th:action="@{/presencas/nova}" method="get" class="space-y-4">
 
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
                 <div>
                     <label for="turmaId" class="block font-semibold mb-1">
                         Turma

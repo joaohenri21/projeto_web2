@@ -50,6 +50,8 @@
         <section class="bg-white rounded shadow p-6">
             <form th:action="@{/turmas/salvar}" th:object="${turma}" method="post" class="space-y-5">
 
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
                 <input type="hidden" th:field="*{id}">
 
                 <div>
