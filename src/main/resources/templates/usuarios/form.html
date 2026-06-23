@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Usuário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
+                <a href="/usuarios" class="bg-red-500 px-4 py-2 rounded">Usuários</a>
+            </nav>
+
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
+                    Sair
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-8 py-8">
+
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800"
+                th:text="${usuario.id == null ? 'Novo Usuário' : 'Editar Usuário'}">
+                Usuário
+            </h1>
+
+            <p class="text-gray-500 mt-1">
+                Cadastre usuários com perfil de administrador ou professor.
+            </p>
+        </section>
+
+        <section class="bg-white rounded shadow p-8">
+
+            <div th:if="${erro != null}" class="bg-red-100 text-red-700 p-4 rounded mb-6 font-semibold"
+                th:text="${erro}">
+                Mensagem de erro
+            </div>
+
+            <form th:action="@{/usuarios/salvar}" method="post" class="space-y-6">
+
+                <input type="hidden" name="id" th:value="${usuario.id}">
+
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <div>
+                    <label for="nome" class="block font-semibold mb-1">
+                        Nome
+                    </label>
+
+                    <input type="text" id="nome" name="nome" th:value="${usuario.nome}"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                        placeholder="Nome do usuário">
+                </div>
+
+                <div>
+                    <label for="login" class="block font-semibold mb-1">
+                        Login
+                    </label>
+
+                    <input type="text" id="login" name="login" th:value="${usuario.login}"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                        placeholder="Login de acesso">
+                </div>
+
+                <div>
+                    <label for="senha" class="block font-semibold mb-1">
+                        Senha
+                    </label>
+
+                    <input type="password" id="senha" name="senha"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                        th:placeholder="${usuario.id == null ? 'Senha do usuário' : 'Deixe em branco para manter a senha atual'}">
+                </div>
+
+                <div>
+                    <label for="papel" class="block font-semibold mb-1">
+                        Papel
+                    </label>
+
+                    <select id="papel" name="papel"
+                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+
+                        <option value="">
+                            Selecione um papel
+                        </option>
+
+                        <option th:each="papelOpcao : ${papeis}" th:value="${papelOpcao}" th:text="${papelOpcao}"
+                            th:selected="${usuario.papel == papelOpcao}">
+                            Papel
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <a href="/usuarios" class="bg-gray-500 text-white px-5 py-3 rounded hover:bg-gray-600">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="bg-red-500 text-white px-5 py-3 rounded hover:bg-red-600">
+                        Salvar Usuário
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

@@ -9,120 +9,120 @@
 
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
-<header class="bg-gray-900 text-white shadow">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold">
-            CT <span class="text-red-500">JW</span>
+    <header class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" class="hover:text-red-400">Professores</a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="bg-red-500 px-4 py-2 rounded">Presenças</a>
+                <a href="/usuarios" class="hover:text-red-400">Usuários</a>
+            </nav>
+
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
+                    Sair
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-8 py-8">
+
+        <section class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Presenças
+                </h1>
+                <p class="text-gray-500 mt-1">
+                    Consulte os registros de presença e falta dos alunos.
+                </p>
+            </div>
+
+            <a href="/presencas/nova" class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
+                Nova Chamada
+            </a>
+        </section>
+
+        <section class="bg-white rounded shadow overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-900 text-white">
+                    <tr>
+                        <th class="p-3 text-left">Aluno</th>
+                        <th class="p-3 text-left">Turma</th>
+                        <th class="p-3 text-left">Data/Hora da Aula</th>
+                        <th class="p-3 text-left">Situação</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:if="${paginaPresencas.content.isEmpty()}">
+                        <td colspan="4" class="p-4 text-center text-gray-500">
+                            Nenhuma presença registrada.
+                        </td>
+                    </tr>
+
+                    <tr th:each="presenca : ${paginaPresencas.content}" class="border-t hover:bg-gray-50">
+
+                        <td class="p-3 font-semibold"
+                            th:text="${presenca.matricula != null && presenca.matricula.aluno != null ? presenca.matricula.aluno.nome : 'Sem aluno'}">
+                            Nome do aluno
+                        </td>
+
+                        <td class="p-3"
+                            th:text="${presenca.matricula != null && presenca.matricula.turma != null ? presenca.matricula.turma.nome : 'Sem turma'}">
+                            Nome da turma
+                        </td>
+
+                        <td class="p-3" th:text="${#temporals.format(presenca.dataHoraAula, 'dd/MM/yyyy HH:mm')}">
+                            Data/Hora
+                        </td>
+
+                        <td class="p-3">
+                            <span th:if="${presenca.presente}"
+                                class="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-semibold">
+                                Presente
+                            </span>
+
+                            <span th:if="${!presenca.presente}"
+                                class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-semibold">
+                                Falta
+                            </span>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="flex justify-between items-center mt-6">
+            <a th:if="${paginaPresencas.hasPrevious()}" th:href="@{/presencas(page=${paginaPresencas.number - 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Anterior
+            </a>
+
+            <span class="text-gray-700">
+                Página
+                <span th:text="${paginaPresencas.number + 1}">1</span>
+                de
+                <span th:text="${paginaPresencas.totalPages}">1</span>
+            </span>
+
+            <a th:if="${paginaPresencas.hasNext()}" th:href="@{/presencas(page=${paginaPresencas.number + 1})}"
+                class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
+                Próxima
+            </a>
         </div>
 
-        <nav class="flex gap-6 text-sm font-medium">
-            <a href="/" class="hover:text-red-400">Início</a>
-            <a href="/alunos" class="hover:text-red-400">Alunos</a>
-            <a href="/turmas" class="hover:text-red-400">Turmas</a>
-            <a href="/professores" class="hover:text-red-400">Professores</a>
-            <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
-            <a href="/presencas" class="bg-red-500 px-4 py-2 rounded">Presenças</a>
-        </nav>
-
-        <div class="text-sm text-gray-300">
-            Olá, Admin
-        </div>
-    </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-8 py-8">
-
-    <section class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                Presenças
-            </h1>
-            <p class="text-gray-500 mt-1">
-                Consulte os registros de presença e falta dos alunos.
-            </p>
-        </div>
-
-        <a href="/presencas/nova"
-           class="bg-red-500 text-white px-5 py-3 rounded shadow hover:bg-red-600">
-            Nova Chamada
-        </a>
-    </section>
-
-    <section class="bg-white rounded shadow overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-900 text-white">
-            <tr>
-                <th class="p-3 text-left">Aluno</th>
-                <th class="p-3 text-left">Turma</th>
-                <th class="p-3 text-left">Data/Hora da Aula</th>
-                <th class="p-3 text-left">Situação</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:if="${paginaPresencas.content.isEmpty()}">
-                <td colspan="4" class="p-4 text-center text-gray-500">
-                    Nenhuma presença registrada.
-                </td>
-            </tr>
-
-            <tr th:each="presenca : ${paginaPresencas.content}"
-                class="border-t hover:bg-gray-50">
-
-                <td class="p-3 font-semibold"
-                    th:text="${presenca.matricula != null && presenca.matricula.aluno != null ? presenca.matricula.aluno.nome : 'Sem aluno'}">
-                    Nome do aluno
-                </td>
-
-                <td class="p-3"
-                    th:text="${presenca.matricula != null && presenca.matricula.turma != null ? presenca.matricula.turma.nome : 'Sem turma'}">
-                    Nome da turma
-                </td>
-
-                <td class="p-3"
-                    th:text="${#temporals.format(presenca.dataHoraAula, 'dd/MM/yyyy HH:mm')}">
-                    Data/Hora
-                </td>
-
-                <td class="p-3">
-                    <span th:if="${presenca.presente}"
-                          class="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-semibold">
-                        Presente
-                    </span>
-
-                    <span th:if="${!presenca.presente}"
-                          class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-semibold">
-                        Falta
-                    </span>
-                </td>
-
-            </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <div class="flex justify-between items-center mt-6">
-        <a th:if="${paginaPresencas.hasPrevious()}"
-           th:href="@{/presencas(page=${paginaPresencas.number - 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Anterior
-        </a>
-
-        <span class="text-gray-700">
-            Página
-            <span th:text="${paginaPresencas.number + 1}">1</span>
-            de
-            <span th:text="${paginaPresencas.totalPages}">1</span>
-        </span>
-
-        <a th:if="${paginaPresencas.hasNext()}"
-           th:href="@{/presencas(page=${paginaPresencas.number + 1})}"
-           class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-800">
-            Próxima
-        </a>
-    </div>
-
-</main>
+    </main>
 
 </body>
 
