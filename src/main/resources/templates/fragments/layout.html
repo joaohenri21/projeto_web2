@@ -14,7 +14,7 @@
     <div th:replace="~{fragments/header :: header}"></div>
 
     <main class="max-w-7xl mx-auto px-8 py-8 flex-1 w-full">
-        <div th:replace="${conteudo}"></div>
+        <th:block th:replace="${conteudo}"></th:block>
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>

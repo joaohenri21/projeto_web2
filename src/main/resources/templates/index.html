@@ -1,17 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout :: layout('CT JW - Início', ~{::conteudo})}">
 
-<head>
-    <meta charset="UTF-8">
-    <title>CT JW - Início</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<body>
 
-<body class="bg-gray-100 min-h-screen text-gray-800">
-
-    <div th:replace="~{fragments/header :: header}"></div>
-
-    <main class="max-w-7xl mx-auto px-8 py-8">
+    <div th:fragment="conteudo">
 
         <section class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">
@@ -216,9 +209,7 @@
 
         </section>
 
-    </main>
-    
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    </div>
 
 </body>
 

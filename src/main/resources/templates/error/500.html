@@ -11,9 +11,35 @@
 
     <main class="flex flex-col items-center justify-center w-full m-10">
 
-        <img src="/imagens/500.png"
-             class="mx-auto block mt-5 max-w-md w-full"
-             alt="Erro 500">
+        <img src="/imagens/500.png" class="mx-auto block mt-5 max-w-md w-full" alt="Erro 500">
+
+        <div class="bg-white rounded shadow p-6 mt-6 max-w-2xl mx-auto text-left">
+
+            <h2 class="text-xl font-bold text-red-600 mb-4">
+                Detalhes do erro
+            </h2>
+
+            <p class="mb-2">
+                <strong>Status:</strong>
+                <span th:text="${status}">500</span>
+            </p>
+
+            <p class="mb-2">
+                <strong>Erro:</strong>
+                <span th:text="${erro}">Erro interno</span>
+            </p>
+
+            <p class="mb-2">
+                <strong>Mensagem:</strong>
+                <span th:text="${mensagem}">Ocorreu um erro inesperado.</span>
+            </p>
+
+            <p class="mb-2">
+                <strong>Caminho:</strong>
+                <span th:text="${caminho}">/</span>
+            </p>
+
+        </div>
 
         <h3 class="text-center mt-5 mb-5 text-lg text-gray-700">
             Ocorreu um erro interno no servidor.

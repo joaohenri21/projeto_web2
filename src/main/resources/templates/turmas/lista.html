@@ -1,17 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/layout :: layout('Turmas', ~{::conteudo})}">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Turmas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<body>
 
-<body class="bg-gray-100 min-h-screen text-gray-800">
+    <div th:fragment="conteudo">
 
-    <div th:replace="~{fragments/header :: header}"></div>
-
-    <main class="max-w-7xl mx-auto px-8 py-8">
+        <div th:replace="~{fragments/mensagens :: mensagens}"></div>
 
         <div th:replace="~{fragments/mensagens :: mensagens}"></div>
 
@@ -119,9 +114,7 @@
             </a>
         </div>
 
-    </main>
-
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    </div>
 
 </body>
 
