@@ -32,13 +32,17 @@ public class RelatorioService {
         this.resourceLoader = resourceLoader;
     }
 
-    public byte[] gerarRelatorioTurmas() {
-        try {
-            List<RelatorioTurmaDTO> dados = turmaRepository.findAll()
-                    .stream()
-                    .map(this::converterTurmaParaRelatorio)
-                    .toList();
+    public byte[] gerarRelatorioTurma(Long id) {
+        Turma turma = turmaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
 
+        RelatorioTurmaDTO dados = converterTurmaParaRelatorio(turma);
+
+        return gerarPdfTurma(dados);
+    }
+
+    private byte[] gerarPdfTurma(RelatorioTurmaDTO dados) {
+        try {
             Resource relatorioPrincipalResource =
                     resourceLoader.getResource("classpath:relatorios/relatorio_turmas.jrxml");
 
@@ -54,7 +58,8 @@ public class RelatorioService {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("SUBRELATORIO_ALUNOS", subRelatorio);
 
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dados);
+            JRBeanCollectionDataSource dataSource =
+                    new JRBeanCollectionDataSource(List.of(dados));
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     relatorioPrincipal,
@@ -65,7 +70,7 @@ public class RelatorioService {
             return JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar relatório de turmas", e);
+            throw new RuntimeException("Erro ao gerar relatório da turma", e);
         }
     }
 

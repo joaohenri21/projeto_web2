@@ -5,8 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/relatorios")
@@ -18,12 +17,12 @@ public class RelatorioController {
         this.relatorioService = relatorioService;
     }
 
-    @GetMapping("/turmas")
-    public ResponseEntity<byte[]> relatorioTurmas() {
-        byte[] pdf = relatorioService.gerarRelatorioTurmas();
+    @GetMapping("/turmas/{id}")
+    public ResponseEntity<byte[]> relatorioTurma(@PathVariable Long id) {
+        byte[] pdf = relatorioService.gerarRelatorioTurma(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=relatorio-turmas.pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=relatorio-turma-" + id + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
