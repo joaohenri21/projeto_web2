@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,14 +47,17 @@ public class AlunoController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid @ModelAttribute Aluno aluno,
-                         BindingResult result) {
-
+    public String salvar(@Valid Aluno aluno,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "alunos/form";
         }
 
         alunoService.salvar(aluno);
+
+        redirectAttributes.addFlashAttribute("sucesso", "Aluno salvo com sucesso.");
+
         return "redirect:/alunos";
     }
 
@@ -69,8 +74,17 @@ public class AlunoController {
     }
 
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        alunoService.excluir(id);
+    public String excluir(@PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
+        try {
+            alunoService.excluir(id);
+
+            redirectAttributes.addFlashAttribute("alerta", "Aluno excluído com sucesso.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erro",
+                    "Não foi possível excluir o aluno, pois existem matrículas vinculadas a ele.");
+        }
+
         return "redirect:/alunos";
     }
 }

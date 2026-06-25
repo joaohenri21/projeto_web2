@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +39,18 @@ public class UsuarioController {
 
     @PostMapping("/salvar")
     public String salvar(@RequestParam(required = false) Long id,
-                         @RequestParam String nome,
-                         @RequestParam String login,
-                         @RequestParam(required = false) String senha,
-                         @RequestParam Papel papel,
-                         Model model) {
+            @RequestParam String nome,
+            @RequestParam String login,
+            @RequestParam(required = false) String senha,
+            @RequestParam Papel papel,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         try {
             usuarioService.salvar(id, nome, login, senha, papel);
+
+            redirectAttributes.addFlashAttribute("sucesso", "Usuário salvo com sucesso.");
+
             return "redirect:/usuarios";
         } catch (IllegalArgumentException e) {
             Usuario usuario = new Usuario();
@@ -70,14 +75,16 @@ public class UsuarioController {
     }
 
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id, Model model) {
+    public String excluir(@PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
         try {
             usuarioService.excluir(id);
-            return "redirect:/usuarios";
+
+            redirectAttributes.addFlashAttribute("alerta", "Usuário excluído com sucesso.");
         } catch (IllegalArgumentException e) {
-            model.addAttribute("erro", e.getMessage());
-            model.addAttribute("paginaUsuarios", usuarioService.listar(Pageable.unpaged()));
-            return "usuarios/lista";
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
+
+        return "redirect:/usuarios";
     }
 }

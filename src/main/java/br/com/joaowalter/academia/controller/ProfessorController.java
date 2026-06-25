@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,13 +48,17 @@ public class ProfessorController {
 
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute Professor professor,
-            BindingResult result) {
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "professores/form";
         }
 
         professorService.salvar(professor);
+
+        redirectAttributes.addFlashAttribute("sucesso", "Professor salvo com sucesso.");
+
         return "redirect:/professores";
     }
 
@@ -69,8 +75,17 @@ public class ProfessorController {
     }
 
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        professorService.excluir(id);
+    public String excluir(@PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
+        try {
+            professorService.excluir(id);
+
+            redirectAttributes.addFlashAttribute("alerta", "Professor excluído com sucesso.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erro",
+                    "Não foi possível excluir o professor, pois existem turmas vinculadas a ele.");
+        }
+
         return "redirect:/professores";
     }
 }

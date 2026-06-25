@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,19 +54,24 @@ public class TurmaController {
     public String salvar(@Valid @ModelAttribute Turma turma,
             BindingResult result,
             @RequestParam(required = false) Long professorId,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            model.addAttribute("professores", professorService.listarTodos());
             return "turmas/form";
         }
 
         if (professorId == null) {
             model.addAttribute("erroProfessor", "Selecione um professor.");
+            model.addAttribute("professores", professorService.listarTodos());
             return "turmas/form";
         }
 
         turma.setProfessor(professorService.buscarPorId(professorId));
         turmaService.salvar(turma);
+
+        redirectAttributes.addFlashAttribute("sucesso", "Turma salva com sucesso.");
 
         return "redirect:/turmas";
     }
@@ -91,8 +98,17 @@ public class TurmaController {
     }
 
     @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        turmaService.excluir(id);
+    public String excluir(@PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
+        try {
+            turmaService.excluir(id);
+
+            redirectAttributes.addFlashAttribute("alerta", "Turma excluída com sucesso.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erro",
+                    "Não foi possível excluir a turma, pois existem matrículas vinculadas a ela.");
+        }
+
         return "redirect:/turmas";
     }
 }

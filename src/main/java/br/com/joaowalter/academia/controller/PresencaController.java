@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,8 @@ public class PresencaController {
     private final MatriculaService matriculaService;
 
     public PresencaController(PresencaService presencaService,
-                              TurmaService turmaService,
-                              MatriculaService matriculaService) {
+            TurmaService turmaService,
+            MatriculaService matriculaService) {
         this.presencaService = presencaService;
         this.turmaService = turmaService;
         this.matriculaService = matriculaService;
@@ -41,7 +42,7 @@ public class PresencaController {
 
     @GetMapping("/nova")
     public String nova(@RequestParam(required = false) Long turmaId,
-                       Model model) {
+            Model model) {
 
         model.addAttribute("turmas", turmaService.listarTodos());
         model.addAttribute("turmaSelecionadaId", turmaId);
@@ -55,11 +56,10 @@ public class PresencaController {
 
     @PostMapping("/salvar")
     public String salvar(@RequestParam(required = false) Long turmaId,
-                         @RequestParam(required = false)
-                         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-                         LocalDateTime dataHoraAula,
-                         @RequestParam(required = false) List<Long> matriculasPresentes,
-                         Model model) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime dataHoraAula,
+            @RequestParam(required = false) List<Long> matriculasPresentes,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         if (turmaId == null || dataHoraAula == null) {
             model.addAttribute("erro", "Selecione uma turma e informe a data/hora da aula.");
@@ -75,6 +75,7 @@ public class PresencaController {
 
         try {
             presencaService.registrarChamada(turmaId, dataHoraAula, matriculasPresentes);
+            redirectAttributes.addFlashAttribute("sucesso", "Presença registrada com sucesso.");
             return "redirect:/presencas";
         } catch (IllegalArgumentException e) {
             model.addAttribute("erro", e.getMessage());
