@@ -82,7 +82,7 @@ O sistema tem como objetivo gerenciar alunos, professores, turmas, matrículas, 
 
 * Geração de relatório PDF com JasperReports
 * Relatório individual por turma
-* Sub-relatório com alunos matriculados na turma
+* Sub-relatório com presenças registradas na turma
 
 ### Tratamento de erros
 
