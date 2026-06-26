@@ -32,8 +32,8 @@
 
                 <div>
                     <label class="block font-semibold mb-1">CPF</label>
-                    <input type="text" th:field="*{cpf}" placeholder="Ex: 000.000.000-00"
-                        class="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
+                    <input type="text" th:field="*{cpf}" id="cpf" maxlength="14" oninput="formatarCpf(this)"
+                        placeholder="000.000.000-00" class="..." required>
 
                     <p th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="text-red-600 text-sm mt-1"></p>
                 </div>
@@ -50,6 +50,22 @@
 
             </form>
         </section>
+
+        <script>
+            function formatarCpf(campo) {
+                let valor = campo.value.replace(/\D/g, "");
+
+                if (valor.length > 11) {
+                    valor = valor.substring(0, 11);
+                }
+
+                valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+                valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+                valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+                campo.value = valor;
+            }
+        </script>
 
     </div>
 
