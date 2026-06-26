@@ -189,11 +189,11 @@ src/main/resources/application.properties
 4. Acessar no navegador:
 
 ```text
-http://localhost:8443
+https://localhost:8443
 ```
 
-```Como o projeto usa certificado autoassinado para ambiente local, o navegador pode exibir aviso de segurança ao acessar https://localhost:8443. Para fins acadêmicos, basta avançar e continuar para localhost.
-```
+Como o projeto usa certificado autoassinado para ambiente local, o navegador pode exibir aviso de segurança ao acessar https://localhost:8443. Para fins acadêmicos, basta avançar e continuar para localhost.
+
 
 ## Estrutura principal do projeto
 

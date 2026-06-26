@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
-<header th:fragment="header" class="bg-gray-900 text-white shadow">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-        <div class="text-2xl font-bold">
-            CT <span class="text-red-500">JW</span>
+    <header th:fragment="header" class="bg-gray-900 text-white shadow">
+        <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                CT <span class="text-red-500">JW</span>
+            </div>
+
+            <nav class="flex gap-6 text-sm font-medium">
+                <a href="/" class="hover:text-red-400">Início</a>
+                <a href="/alunos" class="hover:text-red-400">Alunos</a>
+                <a href="/turmas" class="hover:text-red-400">Turmas</a>
+                <a href="/professores" sec:authorize="hasRole('ADMIN')" class="hover:text-red-400">
+                    Professores
+                </a>
+                <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
+                <a href="/presencas" class="hover:text-red-400">Presenças</a>
+                <a href="/usuarios" sec:authorize="hasRole('ADMIN')" class="hover:text-red-400">
+                    Usuários
+                </a>
+            </nav>
+
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
+                    Sair
+                </button>
+            </form>
         </div>
-
-        <nav class="flex gap-6 text-sm font-medium">
-            <a href="/" class="hover:text-red-400">Início</a>
-            <a href="/alunos" class="hover:text-red-400">Alunos</a>
-            <a href="/turmas" class="hover:text-red-400">Turmas</a>
-            <a href="/professores" class="hover:text-red-400">Professores</a>
-            <a href="/matriculas" class="hover:text-red-400">Matrículas</a>
-            <a href="/presencas" class="hover:text-red-400">Presenças</a>
-            <a href="/usuarios" class="hover:text-red-400">Usuários</a>
-        </nav>
-
-        <form th:action="@{/logout}" method="post">
-            <input type="hidden"
-                   th:name="${_csrf.parameterName}"
-                   th:value="${_csrf.token}">
-
-            <button type="submit"
-                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
-                Sair
-            </button>
-        </form>
-    </div>
-</header>
+    </header>
 
 </body>
+
 </html>

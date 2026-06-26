@@ -42,7 +42,7 @@ public class UsuarioController {
             @RequestParam String nome,
             @RequestParam String login,
             @RequestParam(required = false) String senha,
-            @RequestParam Papel papel,
+            @RequestParam(required = false) Papel papel,
             Model model,
             RedirectAttributes redirectAttributes) {
 
