@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
     th:replace="~{fragments/layout :: layout('CT JW - Início', ~{::conteudo})}">
 
 <body>
@@ -32,7 +32,7 @@
                 </a>
             </div>
 
-            <div class="bg-white p-6 rounded shadow">
+            <div sec:authorize="hasRole('ADMIN')" class="bg-white p-6 rounded shadow">
                 <p class="text-gray-500 text-sm">
                     Professores
                 </p>

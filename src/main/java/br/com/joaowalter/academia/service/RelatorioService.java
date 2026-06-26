@@ -1,10 +1,10 @@
 package br.com.joaowalter.academia.service;
 
-import br.com.joaowalter.academia.dto.RelatorioAlunoDTO;
+import br.com.joaowalter.academia.dto.RelatorioPresencaDTO;
 import br.com.joaowalter.academia.dto.RelatorioTurmaDTO;
-import br.com.joaowalter.academia.model.Matricula;
+import br.com.joaowalter.academia.model.Presenca;
 import br.com.joaowalter.academia.model.Turma;
-import br.com.joaowalter.academia.repository.MatriculaRepository;
+import br.com.joaowalter.academia.repository.PresencaRepository;
 import br.com.joaowalter.academia.repository.TurmaRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -13,6 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +22,14 @@ import java.util.Map;
 public class RelatorioService {
 
     private final TurmaRepository turmaRepository;
-    private final MatriculaRepository matriculaRepository;
+    private final PresencaRepository presencaRepository;
     private final ResourceLoader resourceLoader;
 
     public RelatorioService(TurmaRepository turmaRepository,
-                            MatriculaRepository matriculaRepository,
+                            PresencaRepository presencaRepository,
                             ResourceLoader resourceLoader) {
         this.turmaRepository = turmaRepository;
-        this.matriculaRepository = matriculaRepository;
+        this.presencaRepository = presencaRepository;
         this.resourceLoader = resourceLoader;
     }
 
@@ -47,7 +48,7 @@ public class RelatorioService {
                     resourceLoader.getResource("classpath:relatorios/relatorio_turmas.jrxml");
 
             Resource subRelatorioResource =
-                    resourceLoader.getResource("classpath:relatorios/subrelatorio_alunos.jrxml");
+                    resourceLoader.getResource("classpath:relatorios/subrelatorio_presencas.jrxml");
 
             InputStream relatorioPrincipalStream = relatorioPrincipalResource.getInputStream();
             InputStream subRelatorioStream = subRelatorioResource.getInputStream();
@@ -56,7 +57,7 @@ public class RelatorioService {
             JasperReport subRelatorio = JasperCompileManager.compileReport(subRelatorioStream);
 
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("SUBRELATORIO_ALUNOS", subRelatorio);
+            parametros.put("SUBRELATORIO_PRESENCAS", subRelatorio);
 
             JRBeanCollectionDataSource dataSource =
                     new JRBeanCollectionDataSource(List.of(dados));
@@ -75,15 +76,26 @@ public class RelatorioService {
     }
 
     private RelatorioTurmaDTO converterTurmaParaRelatorio(Turma turma) {
-        List<Matricula> matriculas =
-                matriculaRepository.findByTurmaIdAndStatusOrderByAlunoNomeAsc(turma.getId(), "ATIVA");
+        List<Presenca> presencasRegistradas =
+                presencaRepository.findByMatricula_Turma_IdOrderByDataHoraAulaDesc(turma.getId());
 
-        List<RelatorioAlunoDTO> alunos = matriculas.stream()
-                .map(matricula -> new RelatorioAlunoDTO(
-                        matricula.getAluno().getNome(),
-                        matricula.getStatus()
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        List<RelatorioPresencaDTO> presencas = presencasRegistradas.stream()
+                .map(presenca -> new RelatorioPresencaDTO(
+                        presenca.getDataHoraAula().format(formatter),
+                        presenca.getMatricula().getAluno().getNome(),
+                        Boolean.TRUE.equals(presenca.getPresente()) ? "Presente" : "Falta"
                 ))
                 .toList();
+
+        if (presencas.isEmpty()) {
+            presencas = List.of(new RelatorioPresencaDTO(
+                    "",
+                    "Nenhuma presença registrada para esta turma.",
+                    ""
+            ));
+        }
 
         String professor = turma.getProfessor() != null
                 ? turma.getProfessor().getNome()
@@ -99,7 +111,7 @@ public class RelatorioService {
                 turma.getDiaSemana(),
                 horario,
                 professor,
-                alunos
+                presencas
         );
     }
 }

@@ -9,20 +9,20 @@ public class RelatorioTurmaDTO {
     private String diaSemana;
     private String horario;
     private String professor;
-    private List<RelatorioAlunoDTO> alunos;
+    private List<RelatorioPresencaDTO> presencas;
 
     public RelatorioTurmaDTO(String nome,
                              String modalidade,
                              String diaSemana,
                              String horario,
                              String professor,
-                             List<RelatorioAlunoDTO> alunos) {
+                             List<RelatorioPresencaDTO> presencas) {
         this.nome = nome;
         this.modalidade = modalidade;
         this.diaSemana = diaSemana;
         this.horario = horario;
         this.professor = professor;
-        this.alunos = alunos;
+        this.presencas = presencas;
     }
 
     public String getNome() {
@@ -45,7 +45,7 @@ public class RelatorioTurmaDTO {
         return professor;
     }
 
-    public List<RelatorioAlunoDTO> getAlunos() {
-        return alunos;
+    public List<RelatorioPresencaDTO> getPresencas() {
+        return presencas;
     }
 }
